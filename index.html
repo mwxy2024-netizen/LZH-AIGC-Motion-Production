@@ -1,0 +1,2337 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>李政浩 | 东海遗梦 AIGC 影视作品集</title>
+    <meta
+      name="description"
+      content="李政浩 AIGC 三维动态影视设计作品集，《东海遗梦》AIGC 短片与视觉设定展示。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              inter: ["Inter", "sans-serif"],
+              jakarta: ["Plus Jakarta Sans", "sans-serif"],
+              serif: ["Instrument Serif", "serif"],
+            },
+            colors: {
+              ink: "#070b0a",
+              mint: "#e1352d",
+            },
+          },
+        },
+      };
+    </script>
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react@18.3.1",
+          "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+          "lucide-react": "https://esm.sh/lucide-react@0.468.0?external=react",
+          "hls.js": "https://esm.sh/hls.js@1.5.17?bundle"
+        }
+      }
+    </script>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        background: #070b0a;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: #070b0a;
+        color: #f7f7f4;
+        font-family: Inter, sans-serif;
+        letter-spacing: 0;
+      }
+
+      .liquid-glass {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.01);
+        background-blend-mode: luminosity;
+        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+      }
+
+      .liquid-glass::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        padding: 1.4px;
+        border-radius: inherit;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.72),
+          rgba(255, 255, 255, 0.06),
+          rgba(255, 255, 255, 0.38)
+        );
+        -webkit-mask:
+          linear-gradient(#000 0 0) content-box,
+          linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+      }
+
+      .gallery-frame {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01)),
+          #050706;
+        border-radius: 8px;
+      }
+
+      .bright-gray {
+        color: #d8d8d8;
+      }
+
+      .gallery-frame img,
+      .film-video {
+        width: 100%;
+        height: auto;
+        max-height: 82vh;
+        object-fit: contain;
+        display: block;
+        background: #000;
+      }
+
+      .film-video {
+        max-height: 86vh;
+        border-radius: 8px;
+      }
+
+      .text-balance {
+        text-wrap: balance;
+      }
+
+      .scrollbar-none {
+        scrollbar-width: none;
+      }
+
+      .scrollbar-none::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="module">
+      import React, { useEffect, useRef, useState } from "react";
+      import { createRoot } from "react-dom/client";
+      import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
+      import Hls from "hls.js";
+
+      const h = React.createElement;
+      const bgStream = "https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys.m3u8";
+      const localVideo = "./assets/《东海遗梦》AIGC.mp4";
+      const xiaoluoVideo = "./assets/xiaoluo-video.mp4";
+      const fengtianVideo = "./assets/fengtian-video.mp4";
+      const longVideo = "./assets/long-main-video.mp4";
+      const longJiangVideo = "./assets/long-jiangbanduck.mp4";
+      const longSleepVideo = "./assets/long-sleep.mp4";
+      const muguiyingVideo = "./assets/muguiying-video.mp4";
+      const dongpoVideo = "./assets/dongpo-video.mp4";
+      const piyingxiVideo = "./assets/piyingxi-video.mp4";
+      const yananVideo = "./assets/yanan-video.mp4";
+      const tianwenVideo = "./assets/tianwen-video.mp4";
+      const qifengVideo = "./assets/qifeng-video.mp4";
+      const coscoShipserviceVideo = "./assets/cosco-shipservice-video.mp4";
+      const coscoEnergyVideo = "./assets/cosco-energy-video.mp4";
+
+      const navItems = [
+        ["简介", "#profile"],
+        ["作品", "#works"],
+        ["视频", "#video"],
+        ["联系", "#contact"],
+      ];
+
+      const plates = [
+        "3.png",
+        "4.png",
+        "5.png",
+        "6.png",
+        "7.png",
+        "8.png",
+        "9.png",
+        "10.png",
+        "11.png",
+        "12.png",
+        "名称.png",
+      ];
+
+      const softwareSkills = [
+        "ILLUSTRATOR",
+        "PHOTOSHOP",
+        "CINEMA 4D",
+        "AFTER EFFECTS",
+        "PREMIERE",
+        "3DS MAX",
+        "SKETCHUP",
+        "AUTOCAD",
+        "D5 RENDER",
+        "NANO BANANA",
+        "MIDJOURNEY",
+        "即梦AI",
+        "可灵AI",
+        "Codex",
+        "Chat GPT",
+      ];
+
+      const coreSkills = [
+        "AIGC全流程制作",
+        "场景搭建",
+        "三维渲染",
+        "合成剪辑",
+        "导演思维创作",
+        "企业宣传片",
+        "IP动画",
+        "概念短片",
+        "MG动态动画",
+        "美术图制作",
+      ];
+
+      const eastSeaStoryboardImages = [
+        { src: "./assets/7.png", alt: "《东海遗梦》分镜内容 - 前期概念定义" },
+        { src: "./assets/8.png", alt: "《东海遗梦》分镜内容 - 镜头组" },
+        { src: "./assets/9.png", alt: "《东海遗梦》分镜内容 - 龙骨遗迹" },
+        { src: "./assets/10.png", alt: "《东海遗梦》分镜内容 - 深海遗迹" },
+      ];
+
+      const fengtianStoryboardImages = [
+        { src: "./assets/fengtian-2.png", alt: "奉天职造局创意说明" },
+        { src: "./assets/fengtian-3.png", alt: "奉天职造局元素提取" },
+      ];
+
+      const fengtianIpImages = [
+        { src: "./assets/fengtian-ip-01.jpg", alt: "奉天职造局 IP 形象介绍一" },
+        { src: "./assets/fengtian-ip-02.jpg", alt: "奉天职造局 IP 形象介绍二" },
+        { src: "./assets/fengtian-ip-03.jpg", alt: "奉天职造局 IP 形象介绍三" },
+        { src: "./assets/fengtian-ip-04.jpg", alt: "奉天职造局 IP 形象介绍四" },
+      ];
+
+      const fengtianSceneImages = [
+        { src: "./assets/fengtian-11.png", alt: "奉天职造局分镜展示一", className: "left-0 top-0 z-10 h-[52%] w-auto -rotate-1" },
+        { src: "./assets/fengtian-12.png", alt: "奉天职造局分镜展示二", className: "right-0 top-[3%] z-20 h-[52%] w-auto rotate-1" },
+        { src: "./assets/fengtian-13.png", alt: "奉天职造局分镜展示三", className: "bottom-0 left-[4%] z-30 h-[52%] w-auto rotate-1" },
+        { src: "./assets/fengtian-14.png", alt: "奉天职造局分镜展示四", className: "bottom-[2%] right-[3%] z-40 h-[52%] w-auto -rotate-1" },
+      ];
+
+      const xiaoluoSceneImages = [
+        { src: "./assets/xiaoluo-2.png", alt: "小萝卜头的梦画面二" },
+        { src: "./assets/xiaoluo-3.png", alt: "小萝卜头的梦画面三" },
+        { src: "./assets/xiaoluo-4.png", alt: "小萝卜头的梦画面四" },
+      ];
+
+      const xiaoluoPosterImages = [
+        { src: "./assets/xiaoluo-poster-front.png", alt: "小萝卜头的梦海报正面" },
+        { src: "./assets/xiaoluo-poster-back.png", alt: "小萝卜头的梦海报背面" },
+      ];
+
+      const xiaoluoLiveImages = [
+        { src: "./assets/xiaoluo-live-1.jpg", alt: "小萝卜头的梦落地照片一" },
+        { src: "./assets/xiaoluo-live-2.png", alt: "小萝卜头的梦落地照片二" },
+        { src: "./assets/xiaoluo-award.jpg", alt: "香港紫荆花国际电影节入围图" },
+      ];
+
+      const longLayoutImages = [
+        { src: "./assets/long-1.png", alt: "龍在囧途排版一" },
+        { src: "./assets/long-2.png", alt: "龍在囧途排版二" },
+        { src: "./assets/long-3.png", alt: "龍在囧途排版三" },
+        { src: "./assets/long-4.png", alt: "龍在囧途排版四" },
+        { src: "./assets/long-5.png", alt: "龍在囧途排版五" },
+        { src: "./assets/long-6.png", alt: "龍在囧途排版六" },
+        { src: "./assets/long-7.png", alt: "龍在囧途排版七" },
+      ];
+
+      const longPrologueVideos = [
+        { src: longJiangVideo, poster: "./assets/long-jiang-poster-match.jpg", title: "酱板鸭热梗短片" },
+        { src: longSleepVideo, poster: "./assets/long-sleep-poster-match.jpg", title: "网络热梗整合短片" },
+      ];
+
+      const longPrologueSceneImages = [
+        { src: "./assets/long-jiang-6.png", alt: "龍在囧途酱板鸭热梗场景图" },
+        { src: "./assets/long-sleep-2.png", alt: "龍在囧途网络热梗场景图" },
+      ];
+
+      const muguiyingIpImages = [
+        { src: "./assets/muguiying-ip-row-02.jpg", alt: "桂影傲骨 IP 形象介绍与三视图二" },
+        { src: "./assets/muguiying-ip-row-03.jpg", alt: "桂影傲骨 IP 形象介绍与三视图三" },
+        { src: "./assets/muguiying-ip-row-01.jpg", alt: "桂影傲骨 IP 形象介绍与三视图一" },
+        { src: "./assets/muguiying-ip-row-04.jpg", alt: "桂影傲骨 IP 形象介绍与三视图四" },
+      ];
+
+      const muguiyingSceneImages = [
+        { src: "./assets/muguiying-scene-01.png", alt: "桂影傲骨场景图一" },
+        { src: "./assets/muguiying-scene-02.png", alt: "桂影傲骨场景图二" },
+        { src: "./assets/muguiying-scene-03.png", alt: "桂影傲骨场景图三" },
+        { src: "./assets/muguiying-scene-04.png", alt: "桂影傲骨场景图四" },
+      ];
+
+      const muguiyingIntroParagraphs = [
+        "穆桂英是民间文学与集体意志孕育出的经典形象。她虽非真实历史人物，却寄托着人民群众对女性突破礼法束缚、凭借才智与武力执掌帅印、在家国危难之际挺身而出的朴素向往。",
+        "在明代熊大木《北宋志传》、京剧《穆柯寨》《辕门斩子》《穆桂英挂帅》等作品中，穆桂英以穆柯寨女将的身份登场。她阵前生擒杨宗保，与其结缘成为夫妻，此后归入杨门，屡次披甲出征。晚年面对边关危局，她仍重掌帅印，率军保卫家国。",
+        "我们从她的故事中提取出独立反叛、刚柔并济、强大武力和家国情怀四项核心元素。基于这些特质，角色塑造着力打破穆桂英“单一勇猛、强势杀伐”的固有印象，保留巾帼英雄坚韧、果敢而富有担当的核心气质。",
+        "锋芒为铠甲，温柔为本心，塑造刚烈与柔情并存的反差形象。她立得住家国，扛得住风雨，也懂得人间烟火，始终保有内心的赤诚。",
+      ];
+
+      const muguiyingTraits = [
+        {
+          title: "独立果决",
+          text: "“阵前擒夫”的传奇叙事体现了她不受陈规束缚的行动意识。她敢于作出选择，也敢于承担选择带来的责任，始终掌握自身命运。",
+        },
+        {
+          title: "刚柔并济",
+          text: "军帐问责时，她以军法为准绳，判断果断、处置严明；回到个人生活，她仍会牵挂亲人、体恤将士，在坚决与柔软之间形成鲜明张力。",
+        },
+        {
+          title: "家国情怀",
+          text: "面对个人得失，她会迟疑、悲伤，也会感到疲惫；边关告急之时，她仍能放下私情、整军迎敌，将百姓安危与山河存续置于首位。",
+        },
+        {
+          title: "强大武力",
+          text: "穆柯寨的成长经历赋予她扎实的武艺根基。长枪既是其战斗能力的象征，也是统帅意志的外化。",
+        },
+      ];
+
+      const dongpoImages = [
+        { src: "./assets/dongpo-01.jpg", alt: "东坡奇旅项目画面一" },
+        { src: "./assets/dongpo-03.png", alt: "东坡奇旅项目画面三" },
+        { src: "./assets/dongpo-04.png", alt: "东坡奇旅项目画面四" },
+        { src: "./assets/dongpo-05.png", alt: "东坡奇旅项目画面五" },
+        { src: "./assets/dongpo-06.png", alt: "东坡奇旅项目画面六" },
+        { src: "./assets/dongpo-07.png", alt: "东坡奇旅项目画面七" },
+        { src: "./assets/dongpo-08.png", alt: "东坡奇旅项目画面八" },
+      ];
+
+      const piyingxiImages = [
+        { src: "./assets/piyingxi-28.png", alt: "皮影戏项目画面二十八" },
+        { src: "./assets/piyingxi-29.png", alt: "皮影戏项目画面二十九" },
+        { src: "./assets/piyingxi-30.png", alt: "皮影戏项目画面三十" },
+        { src: "./assets/piyingxi-31.png", alt: "皮影戏项目画面三十一" },
+        { src: "./assets/piyingxi-32.png", alt: "皮影戏项目画面三十二" },
+      ];
+
+      const yananMainImages = [
+        { src: "./assets/yanan-main-16x9-01.jpg", alt: "长征记忆到延安去项目画面一" },
+        { src: "./assets/yanan-main-16x9-03.jpg", alt: "长征记忆到延安去项目画面三" },
+        { src: "./assets/yanan-main-16x9-04.jpg", alt: "长征记忆到延安去项目画面四" },
+        { src: "./assets/yanan-main-16x9-05.jpg", alt: "长征记忆到延安去项目画面五" },
+        { src: "./assets/yanan-main-16x9-06.jpg", alt: "长征记忆到延安去项目画面六" },
+      ];
+
+      const tianwenSequenceImages = [
+        { src: "./assets/tianwen-02.png", alt: "神游东方宇宙项目画面二" },
+        { src: "./assets/tianwen-03.png", alt: "神游东方宇宙项目画面三" },
+      ];
+
+      const tianwenPairImages = [
+        { src: "./assets/tianwen-06.png", alt: "神游东方宇宙项目画面六" },
+        { src: "./assets/tianwen-07.png", alt: "神游东方宇宙项目画面七" },
+      ];
+
+      const qifengImages = [
+        { src: "./assets/qifeng-21.png", alt: "起风时项目画面二十一" },
+        { src: "./assets/qifeng-22.png", alt: "起风时项目画面二十二" },
+        { src: "./assets/qifeng-23.png", alt: "起风时项目画面二十三" },
+        { src: "./assets/qifeng-24.png", alt: "起风时项目画面二十四" },
+        { src: "./assets/qifeng-ending.png", alt: "起风时片尾" },
+      ];
+
+      const coscoShipserviceImages = [
+        { src: "./assets/cosco-shipservice-01.png", alt: "数智船服沙龙分镜一" },
+        { src: "./assets/cosco-shipservice-02.png", alt: "数智船服沙龙分镜二" },
+        { src: "./assets/cosco-shipservice-03.png", alt: "数智船服沙龙分镜三" },
+        { src: "./assets/cosco-shipservice-04.png", alt: "数智船服沙龙分镜四" },
+      ];
+
+      const coscoEnergyImages = [
+        { src: "./assets/cosco-energy-01.png", alt: "中远能源会议串场分镜一" },
+        { src: "./assets/cosco-energy-02.png", alt: "中远能源会议串场分镜二" },
+        { src: "./assets/cosco-energy-03.png", alt: "中远能源会议串场分镜三" },
+      ];
+
+      const kanjianImages = [
+        { src: "./assets/kanjian-01.png", alt: "看见我的也看见你项目画面一" },
+        { src: "./assets/kanjian-02.png", alt: "看见我的也看见你项目画面二" },
+        { src: "./assets/kanjian-03.png", alt: "看见我的也看见你项目画面三" },
+      ];
+
+      const selectedWorkLinks = [
+        {
+          href: "#east-sea",
+          title: "东海遗梦",
+          type: "AIGC短片设计",
+          category: "concept",
+          color: "#4aa8ff",
+        },
+        {
+          href: "#piyingxi",
+          title: "皮影戏",
+          type: "C4D概念短片设计",
+          category: "concept",
+          color: "#c8955d",
+        },
+        {
+          href: "#kanjian",
+          title: "看见我的，也看见你",
+          type: "AIGC概念短片",
+          category: "concept",
+          color: "#ff6b8f",
+        },
+        {
+          href: "#xiaoluo",
+          title: "小萝卜头的梦",
+          type: "XR虚拟现实电影",
+          category: "xr",
+          color: "#e44a36",
+        },
+        {
+          href: "#dongpo",
+          title: "东坡奇旅",
+          type: "AI+XR虚拟现实电影",
+          category: "xr",
+          color: "#5ed29c",
+        },
+        {
+          href: "#tianwen",
+          title: "神游东方宇宙",
+          type: "MR虚拟体验",
+          category: "xr",
+          color: "#7dd3fc",
+        },
+        {
+          href: "#yanan",
+          title: "长征记忆·到延安去",
+          type: "XR虚拟现实电影",
+          category: "xr",
+          color: "#f28c28",
+        },
+        {
+          href: "#fengtian",
+          title: "奉天职造局",
+          type: "AIGC动画设计",
+          category: "animation",
+          color: "#f0ad4e",
+        },
+        {
+          href: "#long",
+          title: "龍在囧途",
+          type: "AIGC动画设计",
+          category: "animation",
+          color: "#ff7ab8",
+        },
+        {
+          href: "#muguiying",
+          title: "桂影傲骨",
+          type: "AIGC动画设计",
+          category: "animation",
+          color: "#9b6cff",
+        },
+        {
+          href: "#qifeng",
+          title: "起风时",
+          type: "AIGC动画设计",
+          category: "animation",
+          color: "#b7e46a",
+        },
+        {
+          href: "#cosco",
+          title: "数智船服沙龙",
+          type: "AIGC宣传视频",
+          category: "corporate",
+          color: "#38bdf8",
+        },
+        {
+          href: "#cosco-energy",
+          title: "中远能源会议串场",
+          type: "AIGC宣传视频",
+          category: "corporate",
+          color: "#7dd3fc",
+        },
+      ];
+
+      const workCategories = [
+        {
+          key: "concept",
+          title: "概念短片设计",
+          english: "Concept Short Film Design",
+          color: "#4aa8ff",
+          works: selectedWorkLinks.filter((work) => work.category === "concept"),
+        },
+        {
+          key: "xr",
+          title: "XR虚拟电影",
+          english: "XR Virtual Film",
+          color: "#e44a36",
+          works: selectedWorkLinks.filter((work) => work.category === "xr"),
+        },
+        {
+          key: "animation",
+          title: "AIGC动画设计",
+          english: "AIGC Animation Design",
+          color: "#f0ad4e",
+          works: selectedWorkLinks.filter((work) => work.category === "animation"),
+        },
+        {
+          key: "corporate",
+          title: "AIGC企业视频设计",
+          english: "AIGC Corporate Video Design",
+          color: "#38bdf8",
+          works: selectedWorkLinks.filter((work) => work.category === "corporate"),
+        },
+      ];
+
+      const profileFields = [
+        ["姓名", "李政浩 / LI ZHENGHAO"],
+        ["生日", "2004.03.06"],
+        ["就读院校", "大连理工大学（2023级）"],
+        ["方向", "AIGC三维动态影视设计"],
+        ["电话", "13236944822"],
+        ["邮箱", "3301162147@qq.com"],
+      ];
+
+      const qrEntries = [
+        ["微信", "qr-wechat-square.png"],
+        ["新片场主页", "qr-xinpianchang-128.png"],
+        ["站酷主页", "qr-zcool-square.png"],
+        ["抖音主页", "qr-douyin-square.png"],
+      ];
+
+      const internships = [
+        {
+          time: "2026.04-2026.07",
+          org: "蓝色光标集团BlueFocus 蓝色宇宙AI+XR事业部导演组",
+          role: "AIGC实习生",
+        },
+      ];
+
+      const projectExperiences = [
+        ["2025.09", "辽宁省教育厅", "《第三届辽宁校企协同》开场片"],
+        ["2025.10", "元一 YUAN YI STUDIO", "《不豆留，展放吧》展陈设计"],
+        ["2026.04", "重庆红岩革命历史博物馆", "《小萝卜头的梦》XR虚拟现实电影"],
+        ["2026.04", "延安旅游集团", "《长征记忆·到延安去》XR穿越之旅"],
+        ["2026.05", "眉山三苏祠博物馆", "《东坡奇旅》AI+XR互动"],
+        ["2026.05", "中远海运船服", "《“数智船服沙龙”》AIGC宣传视频"],
+        ["2026.06", "上海天文馆", "《神游东方宇宙》MR虚拟体验"],
+        ["2026.06", "京东", "《618负鼠产品广告》"],
+        ["2026.06", "中远海运集团", "《中远能源会议串场》"],
+      ];
+
+      const campusExperiences = [
+        ["2023-2033", "中国美术研究院", "助理研究员"],
+        ["2024-2025", "大连理工大学", "学生教育与发展指导学生助理"],
+        ["2024-2025", "大连理工大学", "书院团总支副书记"],
+        ["2023-2026", "大连理工大学", "楼宇自管会会长"],
+        ["2024-2025", "大连理工大学", "院职协组织部干事"],
+        ["2023-2024", "大连理工大学", "院志愿服务办公室干事"],
+        ["2023-2026", "大连理工大学", "环艺2301班长"],
+        ["2024-2026", "元一 YUAN YI STUDIO", "动态设计工作室"],
+      ];
+
+      const designAwards = [
+        "2025 KTK设计奖东北赛区“铜奖”",
+        "2024芬兰AGI设计奖“银奖”",
+        "2024FA国际前沿创新艺术设计大赛“银奖”",
+        "2024第三届HKDADC香港数字艺术设计大赛“银奖”",
+        "2025芬兰AGI设计奖“铜奖”",
+        "2024第六届日本概念艺术设计奖“铜奖”",
+        "2024第六届香港新锐当代设计奖“铜奖”",
+        "2024ROCA平面与空间设计奖“铜奖”",
+        "2024第四届ICAD国际当代青年美术设计大赛“铜奖”",
+        "2024第十五届中国高校美术作品学年展“优秀奖”",
+        "2024第十八届创意中国设计大奖“优秀奖”",
+        "2025第十九届创意中国设计大奖“优秀奖”",
+        "2025第十一届学院派奖“入围奖”",
+        "2024亚洲新锐艺术与设计大赛AVADC“入围奖”",
+      ];
+
+      const campusAwards = [
+        "2024年度获大连理工大学“校优秀团干部”称号",
+        "2024年度获大连理工大学“校优秀学生干部”称号",
+        "2023-2025获精神文明、社会工作、科技创新等6项单项奖学金",
+        "2023-2025大连理工大学“优秀先进班集体”、“优良学风班”",
+        "2024年度大连理工大学寒假社会实践“一等奖”",
+        "2024年度大连理工大学寒假优秀社会调研报告“一等奖”",
+        "2023-2025建筑与艺术学院“头雁班”称号",
+        "2025年度大连理工大学21届攀登杯人文学院院赛“三等奖”",
+        "2024-2025建筑与艺术学院“优秀团员”",
+        "2023-2024建筑与艺术学院“优秀学生干部”",
+        "2023-2024建筑与艺术学院“优秀团干部”",
+        "2023-2024建筑与艺术学院“优秀青年志愿者”",
+      ];
+
+      function BackgroundVideo() {
+        const videoRef = useRef(null);
+
+        useEffect(() => {
+          const video = videoRef.current;
+          if (!video) return undefined;
+
+          if (Hls.isSupported()) {
+            const hls = new Hls({ enableWorker: false });
+            hls.loadSource(bgStream);
+            hls.attachMedia(video);
+            return () => hls.destroy();
+          }
+
+          if (video.canPlayType("application/vnd.apple.mpegurl")) {
+            video.src = bgStream;
+          }
+
+          return undefined;
+        }, []);
+
+        return h("video", {
+          ref: videoRef,
+          className: "absolute inset-0 h-full w-full object-cover opacity-60",
+          autoPlay: true,
+          muted: true,
+          loop: true,
+          playsInline: true,
+        });
+      }
+
+      function Header() {
+        const [open, setOpen] = useState(false);
+        const linkClass =
+          "font-inter text-[16px] font-bold tracking-normal text-white/80 transition hover:text-mint";
+
+        const close = () => setOpen(false);
+
+        return h(
+          "header",
+          { className: "absolute left-0 right-0 top-0 z-50 px-5 py-5 md:px-10" },
+          h(
+            "div",
+            { className: "mx-auto flex max-w-7xl items-center justify-between" },
+            h(
+              "a",
+              {
+                href: "#top",
+                className: "font-jakarta text-sm font-extrabold uppercase tracking-normal text-white",
+                "aria-label": "Go to top",
+              },
+              "个人作品集"
+            ),
+            h(
+              "nav",
+              { className: "hidden items-center gap-9 md:flex" },
+              navItems.map(([label, href]) =>
+                h("a", { key: label, href, className: linkClass }, label)
+              )
+            ),
+            h(
+              "button",
+              {
+                className:
+                  "inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white md:hidden",
+                onClick: () => setOpen(true),
+                "aria-label": "Open menu",
+              },
+              h(Menu, { size: 20 })
+            )
+          ),
+          open &&
+            h(
+              "div",
+              { className: "fixed inset-0 z-50 bg-ink/95 px-6 py-5 backdrop-blur-md md:hidden" },
+              h(
+                "div",
+                { className: "flex items-center justify-between" },
+                h("div", { className: "font-jakarta text-sm font-extrabold uppercase text-white" }, "个人作品集"),
+                h(
+                  "button",
+                  {
+                    className:
+                      "inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white",
+                    onClick: close,
+                    "aria-label": "Close menu",
+                  },
+                  h(X, { size: 20 })
+                )
+              ),
+              h(
+                "nav",
+                { className: "mt-20 flex flex-col gap-8" },
+                navItems.map(([label, href]) =>
+                  h(
+                    "a",
+                    {
+                      key: label,
+                      href,
+                      onClick: close,
+                      className:
+                        "font-inter text-4xl font-extrabold uppercase tracking-tight text-white transition hover:text-mint",
+                    },
+                    label
+                  )
+                )
+              )
+            )
+        );
+      }
+
+      function Hero() {
+        return h(
+          "section",
+          {
+            id: "top",
+            className:
+              "relative flex min-h-[92vh] overflow-hidden bg-ink px-5 pb-8 pt-28 md:items-center md:px-10 md:pt-24",
+          },
+          h(BackgroundVideo),
+          h("div", {
+            className:
+              "absolute inset-0 bg-[linear-gradient(90deg,#070b0a_0%,rgba(7,11,10,0.86)_24%,rgba(7,11,10,0.14)_72%,rgba(7,11,10,0)_100%)]",
+          }),
+          h("div", {
+            className:
+              "absolute inset-0 bg-[linear-gradient(0deg,#070b0a_0%,rgba(7,11,10,0.86)_8%,rgba(7,11,10,0.16)_45%,rgba(7,11,10,0)_100%)]",
+          }),
+          h(
+            "div",
+            { className: "pointer-events-none absolute inset-0 hidden md:block" },
+            [25, 50, 75].map((left) =>
+              h("span", {
+                key: left,
+                className: "absolute top-0 h-full w-px bg-white/10",
+                style: { left: `${left}%` },
+              })
+            )
+          ),
+          h(
+            "svg",
+            {
+              className: "pointer-events-none absolute left-1/2 top-[12%] h-44 w-[900px] -translate-x-1/2 opacity-70",
+              viewBox: "0 0 900 180",
+              fill: "none",
+              "aria-hidden": "true",
+            },
+            h("defs", null, h("filter", { id: "heroGlow", x: "-20%", y: "-80%", width: "140%", height: "260%" }, h("feGaussianBlur", { stdDeviation: "25" }))),
+            h("ellipse", {
+              cx: "450",
+              cy: "80",
+              rx: "330",
+              ry: "28",
+              fill: "#e1352d",
+              opacity: "0.36",
+              filter: "url(#heroGlow)",
+            }),
+            h("ellipse", {
+              cx: "450",
+              cy: "92",
+              rx: "220",
+              ry: "16",
+              fill: "#3c0c0a",
+              opacity: "0.7",
+              filter: "url(#heroGlow)",
+            })
+          ),
+          h(Header),
+          h(
+            "div",
+            { className: "relative z-10 mx-auto flex w-full max-w-7xl flex-col justify-end md:min-h-[70vh]" },
+            h(
+              "div",
+              { className: "max-w-3xl" },
+              h(
+                "p",
+                {
+                  className:
+                    "-translate-y-2 font-jakarta text-base font-extrabold uppercase tracking-normal text-mint md:text-xl",
+                },
+                "LI ZHENGHAO",
+                h("span", { className: "text-white" }, "#")
+              ),
+              h(
+                "h1",
+                {
+                  className:
+                    "mt-6 font-inter text-[48px] font-black uppercase leading-[0.92] tracking-tight bright-gray sm:text-[68px] lg:text-[88px]",
+                },
+                "个人作品集",
+                h("span", { className: "text-mint" }, ".")
+              ),
+              h(
+                "p",
+                {
+                  className:
+                    "mt-6 max-w-2xl font-inter text-base leading-8 text-[#cfcfcf] md:text-lg",
+                },
+                "AIGC 三维动态影视设计 / 短片影像 / 概念视觉 / 动态合成"
+              ),
+              h(
+                "a",
+                {
+                  href: "#works",
+                  className:
+                    "mt-8 inline-flex items-center gap-3 rounded-full bg-mint px-7 py-3.5 font-inter text-sm font-extrabold uppercase text-ink transition hover:bg-white md:text-base",
+                },
+                "查看作品",
+                h(ArrowRight, { size: 17 })
+              )
+            )
+          )
+        );
+      }
+
+      function ProfileBlock({ eyebrow, title, children }) {
+        return h(
+          "section",
+          { className: "border-t border-white/10 pt-7" },
+          h("p", { className: "font-jakarta text-sm font-extrabold uppercase text-mint md:text-base" }, eyebrow),
+          h("h3", { className: "mt-2 font-inter text-2xl font-black tracking-tight bright-gray md:text-4xl" }, title),
+          h("div", { className: "mt-6" }, children)
+        );
+      }
+
+      function TimelineRows({ rows }) {
+        return h(
+          "div",
+          { className: "grid gap-3" },
+          rows.map(([time, org, role]) =>
+            h(
+              "div",
+              {
+                key: `${time}-${org}-${role}`,
+                className:
+                  "grid gap-2 border-b border-white/10 pb-3 font-inter text-sm text-[#d8d8d8] md:grid-cols-[210px_1fr_1.1fr]",
+              },
+              h("span", { className: "font-bold text-mint" }, time),
+              h("span", { className: "text-[#f0f0f0]" }, org),
+              h("span", { className: "text-[#cfcfcf] md:text-right" }, role)
+            )
+          )
+        );
+      }
+
+      function AwardList({ items, compact = false }) {
+        return h(
+          "ul",
+          { className: compact ? "grid gap-2 xl:grid-cols-2 xl:gap-x-5" : "grid gap-3" },
+          items.map((item) =>
+            h(
+              "li",
+              {
+                key: item,
+                className:
+                  "border-b border-white/10 pb-2 font-inter text-[13px] leading-6 text-[#d8d8d8]",
+              },
+              item
+            )
+          )
+        );
+      }
+
+      function ProfileSection() {
+        return h(
+          "section",
+          { id: "profile", className: "bg-ink px-5 py-14 md:px-10 md:py-20" },
+          h(
+            "div",
+            { className: "mx-auto max-w-7xl" },
+            h(
+              "div",
+              { className: "mb-12 grid gap-10 border-b border-white/10 pb-10 lg:grid-cols-[0.8fr_1.2fr]" },
+              h(
+                "div",
+                null,
+                h("p", { className: "font-jakarta text-sm font-extrabold uppercase text-mint md:text-base" }, "PERSONAL INFORMATION"),
+                h(
+                  "h2",
+                  { className: "mt-4 font-inter text-5xl font-black uppercase leading-none tracking-tight bright-gray md:text-7xl" },
+                  "ABOUT ME",
+                  h("span", { className: "text-mint" }, "#")
+                ),
+                h(
+                  "div",
+                  { className: "mt-8 max-w-[320px]" },
+                  h("img", {
+                    src: "./assets/portrait.png",
+                    alt: "李政浩照片",
+                    className: "h-auto w-full object-contain",
+                  })
+                )
+              ),
+              h(
+                "div",
+                { className: "grid gap-7" },
+                h(
+                  "div",
+                  { className: "grid gap-4 sm:grid-cols-2" },
+                  profileFields.map(([label, value]) =>
+                    h(
+                      "div",
+                      { key: label, className: "border-t border-white/10 pt-4" },
+                      h("p", { className: "font-jakarta text-xs font-extrabold uppercase text-mint md:text-sm" }, label),
+                      h("p", { className: "mt-2 font-inter text-lg font-bold leading-8 bright-gray md:text-xl" }, value)
+                    )
+                  )
+                ),
+                h(
+                  "div",
+                  { className: "border-t border-white/10 pt-4" },
+                  h("p", { className: "font-jakarta text-xs font-extrabold uppercase text-mint md:text-sm" }, "主页入口"),
+                  h("p", { className: "mt-2 font-inter text-sm font-bold leading-6 bright-gray md:text-base" }, "微信 / 新片场主页 / 站酷主页 / 抖音主页"),
+                  h(
+                    "div",
+                    { className: "mt-5 flex flex-wrap justify-start gap-7 md:gap-9" },
+                    qrEntries.map(([label, file]) =>
+                      h(
+                        "div",
+                        { key: label, className: "flex w-24 flex-col items-center md:w-28" },
+                        h("img", {
+                          src: `./assets/${file}`,
+                          alt: label,
+                          className: "h-24 w-24 object-contain md:h-28 md:w-28",
+                        }),
+                        h("p", { className: "mt-3 text-center font-inter text-xs font-bold text-[#d8d8d8]" }, label)
+                      )
+                    )
+                  )
+                )
+              )
+            ),
+            h(
+              "div",
+              { className: "grid gap-12" },
+              h(
+                "div",
+                { className: "grid items-stretch gap-10 lg:grid-cols-[0.95fr_1.05fr]" },
+                h(
+                  "div",
+                  { className: "grid gap-7" },
+                  h(
+                    ProfileBlock,
+                    { eyebrow: "Internship", title: "实习经历" },
+                    h(
+                      "div",
+                      { className: "grid gap-3" },
+                      internships.map((item) =>
+                        h(
+                          "div",
+                          {
+                            key: item.org,
+                            className:
+                              "border-b border-white/10 pb-4 font-inter text-[#d8d8d8]",
+                          },
+                          h("p", { className: "font-bold text-xl leading-none text-mint md:text-2xl" }, item.time),
+                          h(
+                            "p",
+                            { className: "mt-3 text-base font-bold leading-6 text-[#f0f0f0] md:whitespace-nowrap" },
+                            item.org,
+                            h("span", { className: "text-[#f0f0f0]" }, item.role)
+                          )
+                        )
+                      )
+                    )
+                  ),
+                  h(
+                    ProfileBlock,
+                    { eyebrow: "Campus", title: "校园经历" },
+                    h(TimelineRows, { rows: campusExperiences })
+                  )
+                ),
+                h(
+                  ProfileBlock,
+                  { eyebrow: "Awards", title: "获奖经历" },
+                  h(AwardList, { items: [...designAwards, ...campusAwards], compact: true })
+                )
+              ),
+              h(
+                ProfileBlock,
+                { eyebrow: "Projects", title: "项目经历" },
+                h(
+                  "div",
+                  { className: "grid gap-3" },
+                  projectExperiences.map(([time, client, project]) =>
+                    h(
+                      "div",
+                      {
+                        key: `${time}-${client}-${project}`,
+                      className:
+                        "grid gap-2 border-b border-white/10 pb-3 font-inter text-sm text-[#d8d8d8] md:grid-cols-[210px_1fr_1.1fr]",
+                      },
+                      h("span", { className: "font-bold text-mint" }, time),
+                      h("span", { className: "font-bold text-[#f0f0f0]" }, client),
+                      h("span", { className: "text-[#cfcfcf] md:text-right" }, project)
+                    )
+                  )
+                )
+              )
+            )
+          )
+        );
+      }
+
+      function Works() {
+        return h(
+          "section",
+          { id: "works", className: "bg-ink px-5 pb-0 pt-14 md:px-10 md:pt-20" },
+          h(
+            "div",
+            { className: "mx-auto max-w-7xl" },
+            h(
+              "div",
+              { className: "mb-10 grid gap-10 border-b border-white/10 pb-8 lg:grid-cols-[1fr_1fr]" },
+              h(
+                "section",
+                null,
+                h("p", { className: "font-jakarta text-sm font-extrabold uppercase text-mint md:text-base" }, "SKILL"),
+                h("h3", { className: "mt-1 font-inter text-4xl font-black uppercase leading-none tracking-tight bright-gray md:text-5xl" }, "软件"),
+                h(
+                  "div",
+                  { className: "mt-6 grid grid-cols-2 gap-x-8 gap-y-3 border-t border-white/10 pt-5 md:grid-cols-3" },
+                  softwareSkills.map((skill) =>
+                    h("p", { key: skill, className: "font-inter text-sm font-bold uppercase leading-5 text-[#d8d8d8] md:text-base" }, skill)
+                  )
+                )
+              ),
+              h(
+                "section",
+                null,
+                h("p", { className: "font-jakarta text-sm font-extrabold uppercase text-mint md:text-base" }, "MAIN SKILLS"),
+                h("h3", { className: "mt-1 font-inter text-4xl font-black uppercase leading-none tracking-tight bright-gray md:text-5xl" }, "主要技能"),
+                h(
+                  "div",
+                  { className: "mt-6 flex flex-wrap gap-3 border-t border-white/10 pt-5" },
+                  coreSkills.map((skill) =>
+                    h("span", { key: skill, className: "border border-white/15 px-4 py-2 font-inter text-sm font-bold text-[#d8d8d8] md:text-base" }, skill)
+                  )
+                )
+              )
+            ),
+            h(
+              "div",
+              { className: "border-b border-white/10 pb-8" },
+              h(
+                "div",
+                null,
+                h("p", { className: "font-jakarta text-sm font-extrabold uppercase text-mint md:text-base" }, "PORTFOLIO & CONTENTS"),
+                h("h2", { className: "mt-3 font-inter text-5xl font-black uppercase leading-none tracking-tight bright-gray md:text-7xl" }, "SELECTED WORKS", h("span", { className: "text-mint" }, "*"))
+              ),
+              h(
+                "nav",
+                { className: "mt-8 grid gap-5", "aria-label": "作品分类快速入口" },
+                workCategories.map((category) =>
+                  h(
+                    "section",
+                    { key: category.key, className: "border border-white/10 bg-white/[0.012] p-4 md:p-5", style: { borderColor: `${category.color}44` } },
+                    h(
+                      "div",
+                      { className: "flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-4" },
+                      h(
+                        "div",
+                        null,
+                        h("p", { className: "font-jakarta text-xs font-extrabold uppercase tracking-[0.24em]", style: { color: category.color } }, category.english),
+                        h("h3", { className: "mt-2 font-inter text-3xl font-black tracking-tight bright-gray md:text-5xl" }, category.title)
+                      ),
+                      h("p", { className: "font-jakarta text-xs font-extrabold uppercase tracking-[0.22em] text-[#bdbdbd] md:text-sm" }, category.english)
+                    ),
+                    h(
+                      "div",
+                      { className: "mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3" },
+                      category.works.map((work, index) =>
+                        h(
+                          "a",
+                          {
+                            key: work.href,
+                            href: work.href,
+                            className:
+                              "group flex min-h-[112px] items-end justify-between border border-white/10 bg-white/[0.02] p-4 transition hover:-translate-y-1 hover:bg-white/[0.04] md:min-h-[132px] md:p-5",
+                            style: { borderColor: `${work.color}55` },
+                          },
+                          h(
+                            "div",
+                            null,
+                            h("p", { className: "font-jakarta text-xs font-extrabold uppercase tracking-[0.24em] text-[#9f9f9f]" }, String(index + 1).padStart(2, "0")),
+                            h("h4", { className: "mt-3 font-inter text-2xl font-black tracking-tight bright-gray md:text-3xl" }, work.title),
+                            h("p", { className: "mt-2 font-jakarta text-xs font-extrabold uppercase tracking-[0.18em]", style: { color: work.color } }, work.type)
+                          ),
+                          h(
+                            "span",
+                            {
+                              className:
+                                "flex h-9 w-9 shrink-0 items-center justify-center border transition group-hover:translate-x-1",
+                              style: { borderColor: `${work.color}80`, color: work.color },
+                            },
+                            h(ArrowRight, { size: 17, strokeWidth: 2.4 })
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        );
+      }
+
+      function WorkSideNav() {
+        return h(
+          "nav",
+          {
+            className:
+              "group fixed right-4 top-1/2 z-40 hidden w-[84px] -translate-y-1/2 border border-white/10 bg-black/85 p-2 shadow-[0_18px_50px_rgba(0,0,0,0.45)] transition-[width,padding] duration-300 hover:w-[248px] hover:p-3 xl:block",
+            "aria-label": "作品快速导航",
+          },
+          h("p", { className: "mb-3 text-center font-jakarta text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#d0d0d0] transition-all group-hover:text-left group-hover:text-[11px] group-hover:tracking-[0.28em]" }, "INDEX"),
+          h(
+            "div",
+            { className: "grid gap-3" },
+            workCategories.map((category) =>
+              h(
+                "section",
+                { key: category.key, className: "grid gap-1.5" },
+                h(
+                  "p",
+                  {
+                    className:
+                      "flex min-h-8 items-center justify-center border border-white/10 px-1 py-1 text-center font-jakarta text-[10px] font-extrabold uppercase leading-3 tracking-[0.08em] transition-all group-hover:justify-start group-hover:px-2 group-hover:text-left group-hover:text-[11px] group-hover:tracking-[0.2em]",
+                    style: { color: category.color, borderColor: `${category.color}33` },
+                    title: category.title,
+                  },
+                  category.title
+                ),
+                category.works.map((work, index) =>
+                  h(
+                    "a",
+                    {
+                      key: work.href,
+                      href: work.href,
+                      className:
+                        "flex items-center gap-2 border border-white/10 bg-white/[0.025] px-2 py-1.5 transition hover:bg-white/[0.07]",
+                      style: { borderColor: `${work.color}33` },
+                      title: work.title,
+                    },
+                    h("span", { className: "h-2 w-2 shrink-0", style: { backgroundColor: work.color } }),
+                    h("span", { className: "w-6 shrink-0 font-jakarta text-[11px] font-extrabold text-white/55" }, String(index + 1).padStart(2, "0")),
+                    h("span", { className: "max-w-0 overflow-hidden whitespace-nowrap font-inter text-sm font-bold text-[#d8d8d8] opacity-0 transition-all duration-300 group-hover:max-w-[170px] group-hover:opacity-100" }, work.title)
+                  )
+                )
+              )
+            )
+          )
+        );
+      }
+
+      function CollapsibleDetails({ color = "#e1352d", children }) {
+        const [open, setOpen] = useState(false);
+        const closeAndReturnToVideo = (event) => {
+          setOpen(false);
+          const scope = event.currentTarget.closest("[data-work-video-scope]") || event.currentTarget.closest("section");
+          const target = scope?.querySelector("video, [data-work-video-placeholder]") || scope;
+          window.setTimeout(() => {
+            target?.scrollIntoView?.({ behavior: "smooth", block: "start" });
+          }, 0);
+        };
+
+        return h(
+          "div",
+          { className: "mt-6" },
+          h(
+            "button",
+            {
+              type: "button",
+              className:
+                "group flex w-full items-center justify-between border bg-white/[0.025] px-5 py-4 text-left transition hover:bg-white/[0.055] md:px-6 md:py-5",
+              style: { borderColor: `${color}66` },
+              onClick: () => setOpen((value) => !value),
+              "aria-expanded": open,
+            },
+            h(
+              "span",
+              { className: "flex items-center gap-3" },
+              h("span", { className: "h-6 w-1", style: { backgroundColor: color } }),
+              h("span", { className: "font-jakarta text-base font-extrabold uppercase tracking-[0.18em] text-[#e6e6e6] md:text-lg" }, "作品详细内容")
+            ),
+            h(
+              "span",
+              { className: "flex items-center gap-3" },
+              h("span", { className: "font-jakarta text-xs font-extrabold uppercase tracking-[0.22em]", style: { color } }, open ? "收起" : "展开"),
+              h(ChevronDown, {
+                size: 18,
+                strokeWidth: 2.4,
+                className: `transition-transform ${open ? "rotate-180" : ""}`,
+                style: { color },
+              })
+            )
+          ),
+          open
+            ? h(
+                "div",
+                { className: "mt-6" },
+                children,
+                h(
+                  "button",
+                  {
+                    type: "button",
+                    className:
+                      "mt-6 flex w-full items-center justify-between border bg-white/[0.025] px-5 py-4 text-left transition hover:bg-white/[0.055] md:px-6 md:py-5",
+                    style: { borderColor: `${color}66` },
+                    onClick: closeAndReturnToVideo,
+                  },
+                  h(
+                    "span",
+                    { className: "flex items-center gap-3" },
+                    h("span", { className: "h-6 w-1", style: { backgroundColor: color } }),
+                    h("span", { className: "font-jakarta text-base font-extrabold uppercase tracking-[0.18em] text-[#e6e6e6] md:text-lg" }, "收起作品详细内容")
+                  ),
+                  h(ChevronDown, {
+                    size: 18,
+                    strokeWidth: 2.4,
+                    className: "rotate-180",
+                    style: { color },
+                  })
+                )
+              )
+            : null
+        );
+      }
+
+      function VideoSection() {
+        const eastSeaBlue = "#4aa8ff";
+
+        return h(
+          "section",
+          { id: "video", className: "bg-black px-5 pb-16 pt-8 md:px-10 md:pb-24 md:pt-10" },
+          h("span", { id: "east-sea", className: "block scroll-mt-24" }),
+          h(
+            "div",
+            { className: "mx-auto max-w-7xl" },
+            h(
+              "div",
+              { className: "mb-8 text-left" },
+              h(
+                "div",
+                null,
+                h("p", { className: "font-jakarta text-sm font-extrabold uppercase md:text-lg", style: { color: eastSeaBlue } }, "DREAM OF THE EAST SEA"),
+                h("h2", { className: "mt-3 font-inter text-4xl font-black tracking-tight bright-gray md:text-6xl" }, "东海遗梦", h("span", { style: { color: eastSeaBlue } }, "#")),
+                h(
+                  "div",
+                  { className: "mt-4 flex flex-wrap items-center gap-3 font-jakarta text-sm font-extrabold uppercase tracking-[0.18em] text-[#d8d8d8] md:text-base" },
+                  h("span", null, "AIGC短片设计"),
+                  h("span", { className: "h-px w-8 bg-white/35" }),
+                  h("span", { style: { color: eastSeaBlue } }, "AIGC Short Film Design")
+                )
+              )
+            ),
+            h(
+              "div",
+              { className: "grid gap-0" },
+              h("video", {
+                className: "block h-auto w-full object-contain",
+                src: localVideo,
+                controls: true,
+                playsInline: true,
+                preload: "metadata",
+                poster: "./assets/east-sea-poster-match.jpg",
+              }),
+              h(
+                CollapsibleDetails,
+                { color: eastSeaBlue },
+                h(
+                  "div",
+                  { className: "pt-4" },
+                  h("p", { className: "font-jakarta text-base font-extrabold uppercase md:text-xl", style: { color: eastSeaBlue } }, "STORYBOARD"),
+                  h("h3", { className: "mt-2 font-inter text-3xl font-black tracking-tight bright-gray md:text-5xl" }, "分镜内容"),
+                  h(
+                    "div",
+                    { className: "mt-6 grid gap-6" },
+                    eastSeaStoryboardImages.map((image) =>
+                      h("img", {
+                        key: image.src,
+                        src: image.src,
+                        alt: image.alt,
+                        className: "block h-auto w-full object-contain",
+                      })
+                    )
+                  )
+                ),
+                h("img", {
+                  src: "./assets/east-sea-ending-replaced.png",
+                  alt: "东海遗梦结尾封面",
+                  className: "mt-6 block h-auto w-full object-contain",
+                }),
+                h("img", {
+                  src: "./assets/east-sea-cover-clean.png",
+                  alt: "东海遗梦原本封面图",
+                  className: "mt-6 block h-auto w-full object-contain",
+                })
+              )
+            )
+          )
+        );
+      }
+
+      function XiaoluoSection() {
+        const red = "#e44a36";
+        const mediaClass = "block h-auto w-full object-contain";
+
+        return h(
+          "section",
+          { className: "border-t border-white/10 bg-black px-5 py-16 md:px-10 md:py-24" },
+          h("span", { id: "xiaoluo", className: "block scroll-mt-24" }),
+          h(
+            "div",
+            { className: "mx-auto max-w-7xl" },
+            h(
+              "div",
+              { className: "mb-8 text-left" },
+              h("p", { className: "font-jakarta text-sm font-extrabold uppercase md:text-lg", style: { color: red } }, "THE DREAM OF LITTLE LUOBO TOU"),
+              h("h2", { className: "mt-3 font-inter text-4xl font-black tracking-tight bright-gray md:text-6xl" }, "小萝卜头的梦", h("span", { style: { color: red } }, "#")),
+              h(
+                "div",
+                { className: "mt-4 flex flex-wrap items-center gap-3 font-jakarta text-sm font-extrabold uppercase tracking-[0.18em] text-[#d8d8d8] md:text-base" },
+                h("span", null, "XR虚拟现实电影"),
+                h("span", { className: "h-px w-8 bg-white/35" }),
+                h("span", null, "XR Virtual Reality Film")
+              )
+            ),
+            h(
+              "div",
+              { className: "grid gap-0" },
+              h("video", {
+                className: mediaClass,
+                src: xiaoluoVideo,
+                controls: true,
+                playsInline: true,
+                preload: "metadata",
+                poster: "./assets/xiaoluo-poster-match.jpg",
+              }),
+              h(
+                CollapsibleDetails,
+                { color: red },
+              h(
+                "div",
+                { className: "grid gap-3 bg-black md:gap-5" },
+                h("img", {
+                  src: xiaoluoSceneImages[1].src,
+                  alt: xiaoluoSceneImages[1].alt,
+                  className: "block aspect-video w-full object-cover",
+                }),
+                h(
+                  "div",
+                  { className: "grid gap-3 md:grid-cols-2 md:gap-5" },
+                  [xiaoluoSceneImages[0], xiaoluoSceneImages[2]].map((image) =>
+                    h("img", {
+                      key: image.src,
+                      src: image.src,
+                      alt: image.alt,
+                      className: "block aspect-video w-full object-cover",
+                    })
+                  )
+                )
+              ),
+              h(
+                "div",
+                { className: "grid grid-cols-2 gap-0 bg-black" },
+                xiaoluoPosterImages.map((image) =>
+                  h("img", {
+                    key: image.src,
+                    src: image.src,
+                    alt: image.alt,
+                    className: "h-full w-full object-contain",
+                  })
+                )
+              ),
+              h(
+                "div",
+                { className: "border-y border-white/10 py-8 text-center" },
+                h(
+                  "p",
+                  { className: "mx-auto max-w-5xl font-inter text-base font-semibold leading-8 text-[#d8d8d8] md:text-xl md:leading-10" },
+                  "《小萝卜头的梦》以新中国年龄最小的烈士宋振中的真实事迹为创作主线，运用 XR 虚拟现实技术实景还原革命岁月。观众与小萝卜头一同穿越黑暗，从旁观走向亲历，让技术成为连接历史与当下的纽带。作品已成功入围香港紫荆花国际电影节，是沉浸式数字电影在红色文旅领域的一次重要实践。"
+                ),
+                h(
+                  "p",
+                  { className: "mx-auto mt-5 max-w-5xl font-inter text-lg font-black leading-8 text-[#f2f2f2] md:text-2xl md:leading-10" },
+                  "致敬革命先烈，也把未完成的光，交给今天继续照亮。"
+                )
+              ),
+              h("img", {
+                src: "./assets/xiaoluo-ending.png",
+                alt: "小萝卜头的梦片尾场景",
+                className: mediaClass,
+              })
+              )
+            )
+          )
+        );
+      }
+
+      function FengtianSection() {
+        const amber = "#f0ad4e";
+        const fengtianMediaClass = "block h-auto w-full object-contain";
+
+        return h(
+          "section",
+          { className: "border-t border-white/10 bg-black px-5 py-16 md:px-10 md:py-24" },
+          h("span", { id: "fengtian", className: "block scroll-mt-24" }),
+          h(
+            "div",
+            { className: "mx-auto max-w-7xl" },
+            h(
+              "div",
+              { className: "mb-8 text-left" },
+              h("p", { className: "font-jakarta text-sm font-extrabold uppercase md:text-lg", style: { color: amber } }, "MUKDEN IMPERIAL MANUFACTORY"),
+              h("h2", { className: "mt-3 font-inter text-4xl font-black tracking-tight bright-gray md:text-6xl" }, "奉天职造局", h("span", { style: { color: amber } }, "#")),
+              h(
+                "div",
+                { className: "mt-4 flex flex-wrap items-center gap-3 font-jakarta text-sm font-extrabold uppercase tracking-[0.18em] text-[#d8d8d8] md:text-base" },
+                h("span", null, "AIGC短片设计"),
+                h("span", { className: "h-px w-8 bg-white/35" }),
+                h("span", null, "AIGC Short Film Design")
+              )
+            ),
+            h(
+              "div",
+              { className: "grid gap-0" },
+              h("video", {
+                className: fengtianMediaClass,
+                src: fengtianVideo,
+                controls: true,
+                playsInline: true,
+                preload: "metadata",
+                poster: "./assets/fengtian-poster-match.jpg",
+              }),
+              h(
+                CollapsibleDetails,
+                { color: amber },
+              h(
+                "div",
+                { className: "pt-4" },
+                h("p", { className: "font-jakarta text-base font-extrabold uppercase md:text-xl", style: { color: amber } }, "STORYBOARD"),
+                h("h3", { className: "mt-2 font-inter text-3xl font-black tracking-tight bright-gray md:text-5xl" }, "分镜内容"),
+                h(
+                  "div",
+                  { className: "mt-6 grid gap-3 md:gap-5" },
+                  fengtianStoryboardImages.map((image) =>
+                    h("img", {
+                      key: image.src,
+                      src: image.src,
+                      alt: image.alt,
+                      className: fengtianMediaClass,
+                    })
+                  )
+                ),
+                h(
+                  "div",
+                  { className: "pt-8 md:pt-12" },
+                  h("p", { className: "font-jakarta text-base font-extrabold uppercase md:text-xl", style: { color: amber } }, "IP CHARACTER DESIGN"),
+                  h("h3", { className: "mt-2 font-inter text-3xl font-black tracking-tight bright-gray md:text-5xl" }, "IP形象介绍"),
+                  h(
+                    "div",
+                    { className: "mt-6 grid gap-3 md:gap-5" },
+                    fengtianIpImages.map((image) =>
+                      h("img", {
+                        key: image.src,
+                        src: image.src,
+                        alt: image.alt,
+                        className: fengtianMediaClass,
+                      })
+                    )
+                  )
+                ),
+                h(
+                  "div",
+                  { className: "mt-5 grid aspect-[2.445/1] w-full grid-cols-[0.273fr_0.727fr] gap-3 overflow-hidden bg-black md:gap-5" },
+                  h("img", {
+                    src: "./assets/fengtian-15-poster.png",
+                    alt: "奉天职造局海报",
+                    className: "h-full w-full object-cover",
+                  }),
+                  h(
+                    "div",
+                    { className: "grid h-full min-w-0 grid-cols-2 grid-rows-2 gap-3 overflow-hidden md:gap-5" },
+                    fengtianSceneImages.map((image) =>
+                      h("img", {
+                        key: image.src,
+                        src: image.src,
+                        alt: image.alt,
+                        className: "h-full w-full object-cover",
+                      })
+                    )
+                  )
+                )
+              ),
+              h("img", {
+                src: "./assets/fengtian-16-ending-21x9.png",
+                alt: "奉天职造局结尾画面",
+                className: "mt-5 block h-auto w-full object-contain",
+              })
+              )
+            )
+          )
+        );
+      }
+
+      function LongSection() {
+        const gold = "#ff7ab8";
+        const longMediaClass = "block h-auto w-full object-contain";
+
+        return h(
+          "section",
+          { className: "border-t border-white/10 bg-black px-5 py-16 md:px-10 md:py-24" },
+          h("span", { id: "long", className: "block scroll-mt-24" }),
+          h(
+            "div",
+            { className: "mx-auto max-w-7xl" },
+            h(
+              "div",
+              { className: "mb-8 text-left" },
+              h("p", { className: "font-jakarta text-sm font-extrabold uppercase md:text-lg", style: { color: gold } }, "LONG ZAI JIONG TU"),
+              h("h2", { className: "mt-3 font-inter text-4xl font-black tracking-tight bright-gray md:text-6xl" }, "龍在囧途", h("span", { style: { color: gold } }, "#")),
+              h(
+                "div",
+                { className: "mt-4 flex flex-wrap items-center gap-3 font-jakarta text-sm font-extrabold uppercase tracking-[0.18em] text-[#d8d8d8] md:text-base" },
+                h("span", null, "AIGC动画设计"),
+                h("span", { className: "h-px w-8 bg-white/35" }),
+                h("span", null, "AIGC Animation Design")
+              )
+            ),
+            h(
+              "div",
+              { className: "grid gap-0" },
+              h("video", {
+                className: longMediaClass,
+                src: longVideo,
+                controls: true,
+                playsInline: true,
+                preload: "metadata",
+                poster: "./assets/long-poster-match.jpg",
+              }),
+              h(
+                CollapsibleDetails,
+                { color: gold },
+              longLayoutImages.map((image) =>
+                h("img", {
+                  key: image.src,
+                  src: image.src,
+                  alt: image.alt,
+                  className: longMediaClass,
+                })
+              ),
+              h(
+                "div",
+                { className: "border-t border-white/10 pt-10 md:pt-14" },
+                h("p", { className: "font-jakarta text-base font-extrabold uppercase md:text-xl", style: { color: gold } }, "PROLOGUE / MEME SHORTS"),
+                h("h3", { className: "mt-2 font-inter text-3xl font-black tracking-tight bright-gray md:text-5xl" }, "龍在囧途序章"),
+                h(
+                  "p",
+                  { className: "mt-4 max-w-none font-inter text-sm font-semibold leading-7 text-[#d8d8d8] md:text-base md:leading-8 xl:whitespace-nowrap" },
+                  "以酱板鸭热梗与网络热梗为序章切口，把短视频语境、角色表演和 AIGC 动画镜头整合成两个轻量化片段，为完整故事建立更年轻的叙事入口。"
+                ),
+                h(
+                  "div",
+                  { className: "mt-6 grid gap-5 md:grid-cols-2" },
+                  longPrologueVideos.map((item) =>
+                    h(
+                      "div",
+                      { key: item.src, className: "min-w-0" },
+                      h("p", { className: "mb-3 font-jakarta text-base font-extrabold uppercase tracking-[0.16em] md:text-xl", style: { color: gold } }, item.title),
+                      h("video", {
+                        className: longMediaClass,
+                        src: item.src,
+                        controls: true,
+                        playsInline: true,
+                        preload: "metadata",
+                        poster: item.poster,
+                      })
+                    )
+                  )
+                ),
+                h(
+                  "div",
+                  { className: "mt-6 grid gap-5 md:grid-cols-2" },
+                  longPrologueSceneImages.map((image) =>
+                    h(
+                      "div",
+                      { key: image.src, className: "min-w-0" },
+                      h("img", {
+                        src: image.src,
+                        alt: image.alt,
+                        className: "block h-auto w-full object-contain",
+                      })
+                    )
+                  )
+                )
+              ),
+              h("img", {
+                src: "./assets/long-10-ending-21x9.jpg",
+                alt: "龍在囧途新结尾画面",
+                className: "mt-5 block h-auto w-full object-contain",
+              })
+              )
+            )
+          )
+        );
+      }
+
+      function MuguiyingSection() {
+        const red = "#9b6cff";
+        const muguiyingMediaClass = "block h-auto w-full object-contain";
+
+        return h(
+          "section",
+          { className: "border-t border-white/10 bg-black px-5 py-16 md:px-10 md:py-24" },
+          h("span", { id: "muguiying", className: "block scroll-mt-24" }),
+          h(
+            "div",
+            { className: "mx-auto max-w-7xl" },
+            h(
+              "div",
+              { className: "mb-8 text-left" },
+              h("p", { className: "font-jakarta text-sm font-extrabold uppercase md:text-lg", style: { color: red } }, "GUI YING AO GU"),
+              h("h2", { className: "mt-3 font-inter text-4xl font-black tracking-tight bright-gray md:text-6xl" }, "桂影傲骨", h("span", { style: { color: red } }, "#")),
+              h(
+                "div",
+                { className: "mt-4 flex flex-wrap items-center gap-3 font-jakarta text-sm font-extrabold uppercase tracking-[0.18em] text-[#d8d8d8] md:text-base" },
+                h("span", null, "AIGC动画设计"),
+                h("span", { className: "h-px w-8 bg-white/35" }),
+                h("span", null, "AIGC Animation Design")
+              )
+            ),
+            h(
+              "div",
+              { className: "grid gap-0" },
+              h("video", {
+                className: muguiyingMediaClass,
+                src: muguiyingVideo,
+                controls: true,
+                playsInline: true,
+                preload: "metadata",
+                poster: "./assets/muguiying-poster-match.jpg",
+              }),
+              h(
+                CollapsibleDetails,
+                { color: red },
+              h(
+                "div",
+                { className: "border-y border-white/10 py-8 md:py-10" },
+                h(
+                  "div",
+                  { className: "grid gap-8 lg:grid-cols-[0.3fr_0.7fr] lg:items-stretch" },
+                  h(
+                    "div",
+                    { className: "flex min-h-[420px] items-stretch justify-center overflow-hidden bg-black" },
+                    h("img", {
+                      src: "./assets/muguiying-element-character-tight.png",
+                      alt: "桂影傲骨元素提取人物",
+                      className: "h-full w-full object-contain",
+                    })
+                  ),
+                  h(
+                    "div",
+                    { className: "flex flex-col justify-center" },
+                    h("p", { className: "font-jakarta text-sm font-extrabold uppercase tracking-[0.18em]", style: { color: red } }, "CREATIVE DESCRIPTION"),
+                    h("h3", { className: "mt-2 font-inter text-3xl font-black tracking-tight bright-gray md:text-5xl" }, "创意说明"),
+                    h(
+                      "div",
+                      { className: "mt-5 grid gap-4 font-inter text-sm font-semibold leading-8 text-[#d8d8d8] md:text-base md:leading-9" },
+                      muguiyingIntroParagraphs.map((text) => h("p", { key: text }, text))
+                    )
+                  )
+                ),
+                h(
+                  "div",
+                  { className: "mt-7 grid gap-3 md:grid-cols-2 xl:grid-cols-4" },
+                  muguiyingTraits.map((item) =>
+                    h(
+                      "div",
+                      { key: item.title, className: "border border-white/10 bg-white/[0.02] p-4" },
+                      h("h4", { className: "font-inter text-lg font-black bright-gray", style: { color: red } }, item.title),
+                      h("p", { className: "mt-3 font-inter text-sm font-semibold leading-7 text-[#d8d8d8]" }, item.text)
+                    )
+                  )
+                )
+              ),
+              h(
+                "div",
+                { className: "pt-8 md:pt-12" },
+                h("p", { className: "font-jakarta text-base font-extrabold uppercase md:text-xl", style: { color: red } }, "IP CHARACTER DESIGN"),
+                h("h3", { className: "mt-2 font-inter text-3xl font-black tracking-tight bright-gray md:text-5xl" }, "IP形象介绍与三视图"),
+                h(
+                  "div",
+                  { className: "mt-6 grid grid-cols-2 gap-0" },
+                  muguiyingIpImages.map((image) =>
+                    h("img", {
+                      key: image.src,
+                      src: image.src,
+                      alt: image.alt,
+                      className: "block h-full w-full object-contain",
+                    })
+                  )
+                )
+              ),
+              h(
+                "div",
+                { className: "pt-8 md:pt-12" },
+                h("p", { className: "font-jakarta text-base font-extrabold uppercase md:text-xl", style: { color: red } }, "SCENES & DISPLAY"),
+                h("h3", { className: "mt-2 font-inter text-3xl font-black tracking-tight bright-gray md:text-5xl" }, "场景与衍生展示"),
+                h(
+                  "div",
+                  { className: "mt-6 grid gap-0 md:grid-cols-2" },
+                  muguiyingSceneImages.map((image) =>
+                    h("img", {
+                      key: image.src,
+                      src: image.src,
+                      alt: image.alt,
+                      className: muguiyingMediaClass,
+                    })
+                  )
+                ),
+                h(
+                  "div",
+                  { className: "grid gap-0 bg-black lg:aspect-[2.4/1] lg:grid-cols-[0.28fr_0.72fr] lg:overflow-hidden" },
+                  h(
+                    "div",
+                    { className: "flex h-full min-w-0 items-center justify-center overflow-hidden" },
+                    h("img", {
+                      src: "./assets/muguiying-poster.png",
+                      alt: "桂影傲骨海报",
+                      className: "h-auto w-full object-contain lg:h-full",
+                    })
+                  ),
+                  h(
+                    "div",
+                    { className: "flex h-full min-w-0 items-center justify-center overflow-hidden" },
+                    h("img", {
+                      src: "./assets/muguiying-figure-display.png",
+                      alt: "桂影傲骨手办展示",
+                      className: "h-auto w-full object-contain lg:h-full",
+                    })
+                  )
+                )
+              )
+              )
+            )
+          )
+        );
+      }
+
+      function DongpoSection() {
+        const green = "#5ed29c";
+        const dongpoMediaClass = "block h-auto w-full object-contain";
+
+        return h(
+          "section",
+          { className: "border-t border-white/10 bg-black px-5 py-16 md:px-10 md:py-24" },
+          h("span", { id: "dongpo", className: "block scroll-mt-24" }),
+          h(
+            "div",
+            { className: "mx-auto max-w-7xl" },
+            h(
+              "div",
+              { className: "mb-8 text-left" },
+              h("p", { className: "font-jakarta text-sm font-extrabold uppercase md:text-lg", style: { color: green } }, "DONGPO WONDER JOURNEY"),
+              h("h2", { className: "mt-3 font-inter text-4xl font-black tracking-tight bright-gray md:text-6xl" }, "东坡奇旅", h("span", { style: { color: green } }, "#")),
+              h(
+                "div",
+                { className: "mt-4 flex flex-wrap items-center gap-3 font-jakarta text-sm font-extrabold uppercase tracking-[0.18em] text-[#d8d8d8] md:text-base" },
+                h("span", null, "AI+XR虚拟现实电影"),
+                h("span", { className: "h-px w-8 bg-white/35" }),
+                h("span", null, "AI+XR Virtual Reality Film")
+              )
+            ),
+            h(
+              "div",
+              { className: "grid gap-0" },
+              h("video", {
+                className: dongpoMediaClass,
+                src: dongpoVideo,
+                controls: true,
+                playsInline: true,
+                preload: "metadata",
+                poster: "./assets/dongpo-poster-match.jpg",
+              }),
+              h(
+                CollapsibleDetails,
+                { color: green },
+              h(
+                "div",
+                { className: "pt-8 md:pt-12" },
+                h("p", { className: "font-jakarta text-base font-extrabold uppercase md:text-xl", style: { color: green } }, "PROJECT VISUALS"),
+                h("h3", { className: "mt-2 font-inter text-3xl font-black tracking-tight bright-gray md:text-5xl" }, "项目画面"),
+                h(
+                  "div",
+                  { className: "mt-6 grid gap-0" },
+                  dongpoImages.map((image) =>
+                    h("img", {
+                      key: image.src,
+                      src: image.src,
+                      alt: image.alt,
+                      className: dongpoMediaClass,
+                    })
+                  )
+                )
+              )
+              )
+            )
+          )
+        );
+      }
+
+      function PiyingxiSection() {
+        const bronze = "#c8955d";
+        const piyingxiMediaClass = "block h-auto w-full object-contain";
+
+        return h(
+          "section",
+          { className: "border-t border-white/10 bg-black px-5 py-16 md:px-10 md:py-24" },
+          h("span", { id: "piyingxi", className: "block scroll-mt-24" }),
+          h(
+            "div",
+            { className: "mx-auto max-w-7xl" },
+            h(
+              "div",
+              { className: "mb-8 text-left" },
+              h("p", { className: "font-jakarta text-sm font-extrabold uppercase md:text-lg", style: { color: bronze } }, "SHADOW PUPPETRY"),
+              h("h2", { className: "mt-3 font-inter text-4xl font-black tracking-tight bright-gray md:text-6xl" }, "皮影戏", h("span", { style: { color: bronze } }, "#")),
+              h(
+                "div",
+                { className: "mt-4 flex flex-wrap items-center gap-3 font-jakarta text-sm font-extrabold uppercase tracking-[0.18em] text-[#d8d8d8] md:text-base" },
+                h("span", null, "C4D概念短片设计"),
+                h("span", { className: "h-px w-8 bg-white/35" }),
+                h("span", null, "C4D Concept Film Design")
+              )
+            ),
+            h(
+              "div",
+              { className: "grid gap-0" },
+              h("video", {
+                className: piyingxiMediaClass,
+                src: piyingxiVideo,
+                controls: true,
+                playsInline: true,
+                preload: "metadata",
+                poster: "./assets/piyingxi-poster-match.jpg",
+              }),
+              h(
+                CollapsibleDetails,
+                { color: bronze },
+              h(
+                "div",
+                { className: "pt-8 md:pt-12" },
+                h("p", { className: "font-jakarta text-base font-extrabold uppercase md:text-xl", style: { color: bronze } }, "PROJECT VISUALS"),
+                h("h3", { className: "mt-2 font-inter text-3xl font-black tracking-tight bright-gray md:text-5xl" }, "项目画面"),
+                h(
+                  "div",
+                  { className: "mt-6 grid gap-3 md:gap-5" },
+                  h("img", {
+                    src: piyingxiImages[0].src,
+                    alt: piyingxiImages[0].alt,
+                    className: piyingxiMediaClass,
+                  }),
+                  h(
+                    "div",
+                    { className: "grid gap-3 md:grid-cols-2 md:gap-5" },
+                    piyingxiImages.slice(1, 3).map((image) =>
+                      h("img", {
+                        key: image.src,
+                        src: image.src,
+                        alt: image.alt,
+                        className: "block h-auto w-full object-contain",
+                      })
+                    )
+                  ),
+                  piyingxiImages.slice(3).map((image) =>
+                    h("img", {
+                      key: image.src,
+                      src: image.src,
+                      alt: image.alt,
+                      className: piyingxiMediaClass,
+                    })
+                  )
+                )
+              ),
+              h("img", {
+                src: "./assets/piyingxi-ending-replaced.png",
+                alt: "皮影戏片尾",
+                className: "mt-5 block h-auto w-full object-contain",
+              })
+              )
+            )
+          )
+        );
+      }
+
+      function YananSection() {
+        const orange = "#f28c28";
+        const yananVideoClass = "block h-auto w-full object-contain";
+        const yananImageClass = "block h-auto w-full object-contain";
+
+        return h(
+          "section",
+          { className: "border-t border-white/10 bg-black px-5 py-16 md:px-10 md:py-24" },
+          h("span", { id: "yanan", className: "block scroll-mt-24" }),
+          h(
+            "div",
+            { className: "mx-auto max-w-7xl" },
+            h(
+              "div",
+              { className: "mb-8 text-left" },
+              h("p", { className: "font-jakarta text-sm font-extrabold uppercase md:text-lg", style: { color: orange } }, "LONG MARCH MEMORY TO YAN'AN"),
+              h("h2", { className: "mt-3 font-inter text-4xl font-black tracking-tight bright-gray md:text-6xl" }, "长征记忆·到延安去", h("span", { style: { color: orange } }, "#")),
+              h(
+                "div",
+                { className: "mt-4 flex flex-wrap items-center gap-3 font-jakarta text-sm font-extrabold uppercase tracking-[0.18em] text-[#d8d8d8] md:text-base" },
+                h("span", null, "XR虚拟现实电影"),
+                h("span", { className: "h-px w-8 bg-white/35" }),
+                h("span", null, "XR Virtual Reality Film")
+              )
+            ),
+            h(
+              "div",
+              { className: "grid gap-0" },
+              h("video", {
+                className: yananVideoClass,
+                src: yananVideo,
+                controls: true,
+                playsInline: true,
+                preload: "metadata",
+                poster: "./assets/yanan-poster-new-16x9.png",
+              }),
+              h(
+                CollapsibleDetails,
+                { color: orange },
+              h(
+                "div",
+                { className: "pt-8 md:pt-12" },
+                h("p", { className: "font-jakarta text-base font-extrabold uppercase md:text-xl", style: { color: orange } }, "PROJECT VISUALS"),
+                h("h3", { className: "mt-2 font-inter text-3xl font-black tracking-tight bright-gray md:text-5xl" }, "项目画面"),
+                h(
+                  "div",
+                  { className: "mt-6 grid gap-3 md:gap-5" },
+                  h(
+                    "div",
+                    { className: "grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-5" },
+                    yananMainImages.slice(0, 3).map((image) =>
+                      h("img", {
+                        key: image.src,
+                        src: image.src,
+                        alt: image.alt,
+                        className: "block aspect-video w-full object-cover",
+                      })
+                    )
+                  ),
+                  h(
+                    "div",
+                    { className: "grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-5" },
+                    yananMainImages.slice(3).map((image) =>
+                      h("img", {
+                        key: image.src,
+                        src: image.src,
+                        alt: image.alt,
+                        className: "block aspect-video w-full object-cover",
+                      })
+                    )
+                  )
+                )
+              ),
+              h("img", {
+                src: "./assets/yanan-ending-replaced.png",
+                alt: "长征记忆到延安去片尾图片",
+                className: "mt-5 block h-auto w-full object-contain",
+              })
+              )
+            )
+          )
+        );
+      }
+
+      function TianwenSection() {
+        const cyan = "#7dd3fc";
+        const tianwenMediaClass = "block h-auto w-full object-contain";
+
+        return h(
+          "section",
+          { className: "border-t border-white/10 bg-black px-5 py-16 md:px-10 md:py-24" },
+          h("span", { id: "tianwen", className: "block scroll-mt-24" }),
+          h(
+            "div",
+            { className: "mx-auto max-w-7xl" },
+            h(
+              "div",
+              { className: "mb-8 text-left" },
+              h("p", { className: "font-jakarta text-sm font-extrabold uppercase md:text-lg", style: { color: cyan } }, "ORIENTAL COSMOS VOYAGE"),
+              h("h2", { className: "mt-3 font-inter text-4xl font-black tracking-tight bright-gray md:text-6xl" }, "神游东方宇宙", h("span", { style: { color: cyan } }, "#")),
+              h(
+                "div",
+                { className: "mt-4 flex flex-wrap items-center gap-3 font-jakarta text-sm font-extrabold uppercase tracking-[0.18em] text-[#d8d8d8] md:text-base" },
+                h("span", null, "MR虚拟体验"),
+                h("span", { className: "h-px w-8 bg-white/35" }),
+                h("span", null, "MR Virtual Experience")
+              )
+            ),
+            h(
+              "div",
+              { className: "grid gap-0" },
+              h("video", {
+                className: tianwenMediaClass,
+                src: tianwenVideo,
+                controls: true,
+                playsInline: true,
+                preload: "metadata",
+                poster: "./assets/tianwen-poster-match.jpg",
+              }),
+              h(
+                CollapsibleDetails,
+                { color: cyan },
+              h(
+                "div",
+                { className: "pt-8 md:pt-12" },
+                h("p", { className: "font-jakarta text-base font-extrabold uppercase md:text-xl", style: { color: cyan } }, "PROJECT VISUALS"),
+                h("h3", { className: "mt-2 font-inter text-3xl font-black tracking-tight bright-gray md:text-5xl" }, "项目画面"),
+                h(
+                  "div",
+                  { className: "mt-6 grid gap-3 md:gap-5" },
+                  h(
+                    "div",
+                    { className: "grid gap-3 md:grid-cols-2 md:gap-5" },
+                    tianwenSequenceImages.map((image) =>
+                      h("img", {
+                        key: image.src,
+                        src: image.src,
+                        alt: image.alt,
+                        className: "block h-auto w-full object-contain",
+                      })
+                    )
+                  ),
+                  h("img", {
+                    src: "./assets/tianwen-05-21x9.png",
+                    alt: "神游东方宇宙项目画面五",
+                    className: tianwenMediaClass,
+                  }),
+                  h(
+                    "div",
+                    { className: "grid gap-3 md:grid-cols-2 md:gap-5" },
+                    tianwenPairImages.map((image) =>
+                      h("img", {
+                        key: image.src,
+                        src: image.src,
+                        alt: image.alt,
+                        className: "block h-auto w-full object-contain",
+                      })
+                    )
+                  )
+                )
+              ),
+              h("img", {
+                src: "./assets/tianwen-ending.jpg",
+                alt: "神游东方宇宙片尾",
+                className: "mt-5 block h-auto w-full object-contain",
+              })
+              )
+            )
+          )
+        );
+      }
+
+      function QifengSection() {
+        const springGreen = "#b7e46a";
+        const qifengMediaClass = "block h-auto w-full object-contain";
+
+        return h(
+          "section",
+          { className: "border-t border-white/10 bg-black px-5 py-16 md:px-10 md:py-24" },
+          h("span", { id: "qifeng", className: "block scroll-mt-24" }),
+          h(
+            "div",
+            { className: "mx-auto max-w-7xl" },
+            h(
+              "div",
+              { className: "mb-8 text-left" },
+              h("p", { className: "font-jakarta text-sm font-extrabold uppercase md:text-lg", style: { color: springGreen } }, "WHEN THE WIND RISES"),
+              h("h2", { className: "mt-3 font-inter text-4xl font-black tracking-tight bright-gray md:text-6xl" }, "起风时", h("span", { style: { color: springGreen } }, "#")),
+              h(
+                "div",
+                { className: "mt-4 flex flex-wrap items-center gap-3 font-jakarta text-sm font-extrabold uppercase tracking-[0.18em] text-[#d8d8d8] md:text-base" },
+                h("span", null, "AIGC动画设计"),
+                h("span", { className: "h-px w-8 bg-white/35" }),
+                h("span", null, "AIGC Animation Design")
+              )
+            ),
+            h(
+              "div",
+              { className: "grid gap-0" },
+              h("video", {
+                className: qifengMediaClass,
+                src: qifengVideo,
+                controls: true,
+                playsInline: true,
+                preload: "metadata",
+                poster: "./assets/qifeng-poster-new.png",
+              }),
+              h(
+                CollapsibleDetails,
+                { color: springGreen },
+              h(
+                "div",
+                { className: "pt-8 md:pt-12" },
+                h("p", { className: "font-jakarta text-base font-extrabold uppercase md:text-xl", style: { color: springGreen } }, "PROJECT VISUALS"),
+                h("h3", { className: "mt-2 font-inter text-3xl font-black tracking-tight bright-gray md:text-5xl" }, "项目画面"),
+                h(
+                  "div",
+                  { className: "mt-6 grid gap-3 md:gap-5" },
+                  qifengImages.map((image) =>
+                    h("img", {
+                      key: image.src,
+                      src: image.src,
+                      alt: image.alt,
+                      className: qifengMediaClass,
+                    })
+                  )
+                )
+              )
+              )
+            )
+          )
+        );
+      }
+
+      function CoscoSection() {
+        const oceanBlue = "#38bdf8";
+        const coscoMediaClass = "block h-auto w-full object-contain";
+
+        return h(
+          "section",
+          { className: "border-t border-white/10 bg-black px-5 py-16 md:px-10 md:py-24" },
+          h("span", { id: "cosco", className: "block scroll-mt-24" }),
+          h(
+            "div",
+            { className: "mx-auto max-w-7xl" },
+            h(
+              "div",
+              { className: "mb-8 text-left" },
+              h("p", { className: "font-jakarta text-sm font-extrabold uppercase md:text-lg", style: { color: oceanBlue } }, "COSCO SHIPPING GROUP"),
+              h("h2", { className: "mt-3 font-inter text-4xl font-black tracking-tight bright-gray md:text-6xl" }, "中远航运集团-AIGC视频制作", h("span", { style: { color: oceanBlue } }, "#")),
+              h(
+                "div",
+                { className: "mt-4 flex flex-wrap items-center gap-3 font-jakarta text-sm font-extrabold uppercase tracking-[0.18em] text-[#d8d8d8] md:text-base" },
+                h("span", null, "AIGC宣传视频"),
+                h("span", { className: "h-px w-8 bg-white/35" }),
+                h("span", null, "AIGC Promotional Video")
+              )
+            ),
+            h(
+              "div",
+              { className: "grid gap-0" },
+              h(
+                "div",
+                { className: "grid gap-0", "data-work-video-scope": true },
+                h(
+                  "div",
+                  { className: "mb-6" },
+                  h("p", { className: "font-jakarta text-base font-extrabold uppercase md:text-xl", style: { color: oceanBlue } }, "DIGITAL SHIP SERVICE SALON"),
+                  h("h3", { className: "mt-2 font-inter text-3xl font-black tracking-tight bright-gray md:text-5xl" }, "数智船服沙龙", h("span", { style: { color: oceanBlue } }, "#"))
+                ),
+                h("video", {
+                  className: coscoMediaClass,
+                  src: coscoShipserviceVideo,
+                  controls: true,
+                  playsInline: true,
+                  preload: "metadata",
+                  poster: "./assets/cosco-shipservice-poster.png",
+                }),
+                h(
+                  CollapsibleDetails,
+                  { color: oceanBlue },
+                  h(
+                    "div",
+                    { className: "pt-8 md:pt-12" },
+                    h("p", { className: "font-jakarta text-base font-extrabold uppercase md:text-xl", style: { color: oceanBlue } }, "DIGITAL SHIP SERVICE SALON"),
+                    h("h3", { className: "mt-2 font-inter text-3xl font-black tracking-tight bright-gray md:text-5xl" }, "数智船服沙龙分镜"),
+                    h(
+                      "p",
+                      { className: "mt-4 max-w-4xl font-inter text-sm font-semibold leading-7 text-[#d8d8d8] md:text-base md:leading-8" },
+                      "围绕中远海运船服的数智化服务场景，建立海洋科技、智慧平台与品牌传播之间的视觉连接，呈现企业服务升级的清晰叙事。"
+                    ),
+                    h(
+                      "div",
+                      { className: "mt-6 grid gap-3 md:gap-5" },
+                      coscoShipserviceImages.map((image) =>
+                        h("img", {
+                          key: image.src,
+                          src: image.src,
+                          alt: image.alt,
+                          className: coscoMediaClass,
+                        })
+                      )
+                    )
+                  )
+                )
+              ),
+              h(
+                "div",
+                { id: "cosco-energy", className: "mt-12 scroll-mt-24 border-t border-white/10 pt-10 md:mt-16 md:pt-12", "data-work-video-scope": true },
+                h("p", { className: "font-jakarta text-base font-extrabold uppercase md:text-xl", style: { color: oceanBlue } }, "COSCO ENERGY MEETING MOTION"),
+                h("h3", { className: "mt-2 font-inter text-3xl font-black tracking-tight bright-gray md:text-5xl" }, "中远能源会议串场", h("span", { style: { color: oceanBlue } }, "#")),
+                h("video", {
+                  className: "mt-6 block h-auto w-full object-contain",
+                  src: coscoEnergyVideo,
+                  controls: true,
+                  playsInline: true,
+                  preload: "metadata",
+                  poster: "./assets/cosco-energy-poster.png",
+                }),
+                h(
+                  CollapsibleDetails,
+                  { color: oceanBlue },
+                  h(
+                    "div",
+                    { className: "pt-8 md:pt-12" },
+                    h("p", { className: "font-jakarta text-base font-extrabold uppercase md:text-xl", style: { color: oceanBlue } }, "STORYBOARD"),
+                    h("h3", { className: "mt-2 font-inter text-3xl font-black tracking-tight bright-gray md:text-5xl" }, "中远能源会议串场分镜"),
+                    h(
+                      "div",
+                      { className: "mt-6 grid gap-3 md:gap-5" },
+                      coscoEnergyImages.map((image) =>
+                        h("img", {
+                          key: image.src,
+                          src: image.src,
+                          alt: image.alt,
+                          className: coscoMediaClass,
+                        })
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        );
+      }
+
+      function KanjianSection() {
+        const rose = "#ff6b8f";
+        const kanjianMediaClass = "block h-auto w-full object-contain";
+
+        return h(
+          "section",
+          { className: "border-t border-white/10 bg-black px-5 py-16 md:px-10 md:py-24" },
+          h("span", { id: "kanjian", className: "block scroll-mt-24" }),
+          h(
+            "div",
+            { className: "mx-auto max-w-7xl" },
+            h(
+              "div",
+              { className: "mb-8 text-left" },
+              h("p", { className: "font-jakarta text-sm font-extrabold uppercase md:text-lg", style: { color: rose } }, "SEE ME, SEE YOU"),
+              h("h2", { className: "mt-3 font-inter text-4xl font-black tracking-tight bright-gray md:text-6xl" }, "看见我的，也看见你", h("span", { style: { color: rose } }, "#")),
+              h(
+                "div",
+                { className: "mt-4 flex flex-wrap items-center gap-3 font-jakarta text-sm font-extrabold uppercase tracking-[0.18em] text-[#d8d8d8] md:text-base" },
+                h("span", null, "AIGC概念短片"),
+                h("span", { className: "h-px w-8 bg-white/35" }),
+                h("span", null, "AIGC Concept Short Film")
+              )
+            ),
+            h(
+              "div",
+              { className: "grid gap-0" },
+              h(
+                "div",
+                { className: "flex aspect-video w-full items-center justify-center bg-[#050505] ring-1 ring-white/10", "data-work-video-placeholder": true },
+                h(
+                  "div",
+                  { className: "text-center" },
+                  h("p", { className: "font-jakarta text-sm font-extrabold uppercase tracking-[0.24em] md:text-lg", style: { color: rose } }, "VIDEO RESERVED"),
+                  h("p", { className: "mt-3 font-inter text-sm font-semibold text-[#d8d8d8] md:text-base" }, "视频位置预留")
+                )
+              ),
+              h(
+                CollapsibleDetails,
+                { color: rose },
+                h(
+                  "div",
+                  { className: "pt-8 md:pt-12" },
+                  h("p", { className: "font-jakarta text-base font-extrabold uppercase md:text-xl", style: { color: rose } }, "PROJECT VISUALS"),
+                  h("h3", { className: "mt-2 font-inter text-3xl font-black tracking-tight bright-gray md:text-5xl" }, "项目画面"),
+                  h(
+                    "div",
+                    { className: "mt-6 grid gap-3 md:gap-5" },
+                    kanjianImages.map((image) =>
+                      h("img", {
+                        key: image.src,
+                        src: image.src,
+                        alt: image.alt,
+                        className: kanjianMediaClass,
+                      })
+                    )
+                  )
+                )
+              )
+            )
+          )
+        );
+      }
+
+      function Contact() {
+        return h(
+          "footer",
+          { id: "contact", className: "bg-ink px-5 py-12 md:px-10" },
+          h(
+            "div",
+            { className: "mx-auto flex max-w-7xl flex-col justify-between gap-6 border-t border-white/10 pt-8 md:flex-row md:items-center" },
+            h(
+              "div",
+              null,
+              h("p", { className: "font-inter text-sm font-bold bright-gray" }, "李政浩 / 个人作品集"),
+              h("p", { className: "mt-2 font-inter text-sm text-[#cfcfcf]" }, "3301162147@qq.com · 13236944822")
+            ),
+            h("p", { className: "font-jakarta text-xs font-bold uppercase text-[#bcbcbc]" }, "PORTFOLIO")
+          )
+        );
+      }
+
+      function App() {
+        return h(
+          React.Fragment,
+          null,
+          h(WorkSideNav),
+          h(Hero),
+          h(ProfileSection),
+          h(Works),
+          h(VideoSection),
+          h(PiyingxiSection),
+          h(KanjianSection),
+          h(XiaoluoSection),
+          h(DongpoSection),
+          h(TianwenSection),
+          h(YananSection),
+          h(FengtianSection),
+          h(LongSection),
+          h(MuguiyingSection),
+          h(QifengSection),
+          h(CoscoSection),
+          h(Contact)
+        );
+      }
+
+      createRoot(document.getElementById("root")).render(h(App));
+    </script>
+  </body>
+</html>
